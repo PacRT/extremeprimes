@@ -1,0 +1,266 @@
+'use strict';
+const availability = require('./availability');
+const orderitem = require('./orderitem');
+const order = require('./order');
+const sku = require('./sku');
+const product = require('./product');
+const authentication = require('./authentication');
+const user = require('./user');
+const Sequelize = require('sequelize');
+module.exports = function () {
+  const app = this;
+
+  const sequelize = new Sequelize(app.get('postgres'), {
+    dialect: 'postgres',
+    logging: false
+  });
+  app.set('sequelize', sequelize);
+
+  app.configure(authentication);
+  app.configure(user);
+  app.configure(sku);
+  app.configure(product);
+  app.configure(availability);
+  app.configure(order);
+  app.configure(orderitem);
+
+  app.set('view engine', 'ejs');
+
+  app.set('models', sequelize.models);
+
+  // Setup relationships
+  const models = sequelize.models;
+  Object.keys(models)
+    .map(name => models[name])
+    .filter(model => model.associate)
+    .forEach(model => model.associate(models));
+
+  sequelize.sync({force: true});
+
+  app.get('/about', function (req, res) {
+    res.render('pages/about');
+  });
+
+  app.get('/index_test', function (req, res) {
+    var skus = [
+      {
+        img: 'images/omd_em1_m2.jpg',
+        img_back: 'images/omd_em1_m2_back.jpg',
+        id: "whatever0",
+        name: 'Olympus OMD EM1 Mark II',
+        orig_price: '1990.00',
+        price: '1890.00',
+        rating: '5'
+      }];
+    res.render('pages/index', {skus: skus});
+  });
+
+  app.get('/content-right', function (req, res) {
+    console.log("req.query: ", req.query)
+    if (req.query.manufacturer != null) {
+      if (req.query.manufacturer == 'SLR_SLAYERS' || req.query.manufacturer == 'MOVIE_STARS') {
+        sequelize.models.skus.findAll().then(function (skus) {
+          res.render('partials/content-right', {skus: skus});
+        })
+      } else {
+        sequelize.models.skus.findAll({
+          where: {
+            manufacturer: req.query.manufacturer
+          }
+        }).then(function (skus) {
+          if (skus.length > 0) res.render('partials/content-right', {skus: skus});
+          else {
+            sequelize.models.skus.findAll().then(function (skus) {
+              res.render('partials/content-right', {skus: skus});
+            })
+          }
+        })
+      }
+    } else if (req.query.category != null) {
+      sequelize.models.skus.findAll({
+        where: {
+          category: req.query.category
+        }
+      }).then(function (skus) {
+        if (skus.length > 0) res.render('partials/content-right', {skus: skus});
+      })
+    } else {
+      sequelize.models.skus.findAll().then(function (skus) {
+        res.render('partials/content-right', {skus: skus});
+      })
+    }
+  });
+
+  app.get('/index', function (req, res) {
+    sequelize.models.skus.findAll().then(function (skus) {
+      app.render('pages/index', {skus: skus}, function (err, data) {
+        res.send(data);
+      });
+    });
+  });
+  /*var skus = [{
+   "id": "SKU-0",
+   "manufacturer": "FUJI",
+   "model": "X-T2",
+   "totalquantity": 2,
+   "quantityavailable": 1,
+   "introdate": "2016-01-01T08:00:00.000Z",
+   "marketprice": "995.95",
+   "links": "http://meme.me",
+   "relatedskus": "NULL",
+   "text": "awesome sku",
+   "createdAt": "2017-01-10T01:47:47.821Z",
+   "updatedAt": "2017-01-10T01:47:47.821Z"
+   }, {
+   "id": "SKU-1",
+   "manufacturer": "OLYMPUS",
+   "model": "OMD EM1 Mark II",
+   "totalquantity": 2,
+   "quantityavailable": 1,
+   "introdate": "2016-01-01T08:00:00.000Z",
+   "marketprice": "995.95",
+   "links": "http://meme.me",
+   "relatedskus": "NULL",
+   "text": "awesome sku",
+   "createdAt": "2017-01-10T02:45:53.286Z",
+   "updatedAt": "2017-01-10T02:45:53.286Z"
+   }, {
+   "id": "LEICA-M-240",
+   "manufacturer": "LEICA",
+   "model": "M 240",
+   "totalquantity": 2,
+   "quantityavailable": 1,
+   "introdate": "2012-01-01T08:00:00.000Z",
+   "marketprice": "7200.00",
+   "links": "https://us.leica-camera.com",
+   "relatedskus": null,
+   "text": "A classic rangefinder",
+   "createdAt": "2017-01-20T08:00:00.000Z",
+   "updatedAt": "2017-01-20T08:00:00.000Z"
+   }, {
+   "id": "sum-test",
+   "manufacturer": "LEICA",
+   "model": "Summilux 50/1.4",
+   "totalquantity": 2,
+   "quantityavailable": 1,
+   "introdate": "2012-01-01T08:00:00.000Z",
+   "marketprice": "4200.00",
+   "links": "https://us.leica-camera.com",
+   "relatedskus": null,
+   "text": "A classic rangefinder lens",
+   "createdAt": "2017-01-20T08:00:00.000Z",
+   "updatedAt": "2017-01-20T08:00:00.000Z"
+   }, {
+   "id": "sum-test1",
+   "manufacturer": "LEICA",
+   "model": "Summilux 50/1.4",
+   "totalquantity": 2,
+   "quantityavailable": 1,
+   "introdate": "2012-01-01T08:00:00.000Z",
+   "marketprice": "4200.00",
+   "links": "https://us.leica-camera.com",
+   "relatedskus": null,
+   "text": "A classic rangefinder lens",
+   "createdAt": "2017-01-20T08:00:00.000Z",
+   "updatedAt": "2017-01-20T08:00:00.000Z"
+   }];
+   res.render('pages/index', {skus: skus});
+   });*/
+
+  app.get('/product_details', function (req, res) {
+    console.log('req.query.sku: ', req.query.sku)
+    if (req.query.sku == null) {
+      // render the error page
+      res.redirect('/index')
+    } else {
+      sequelize.models.skus.findByPrimary(req.query.sku).then(function (sku) {
+        res.render('pages/product_details_complete', {sku: sku});
+      })
+    }
+  });
+
+  app.get('/product_details_test', function (req, res) {
+    console.log('req.query.sku: ', req.query.sku)
+    var sku = {
+      img: 'images/omd_em1_m2.jpg',
+      img_back: 'images/omd_em1_m2_back.jpg',
+      id: "whatever0",
+      name: 'Olympus OMD EM1 Mark II',
+      orig_price: '1990.00',
+      price: '1890.00',
+      rating: '5'
+    };
+    res.render('pages/product_details_complete', {sku: sku});
+  });
+
+  app.post('/stripe-pay', function (req, res) {
+    console.log('Trying to process the ceredit card')
+    var stripe = require("stripe")("sk_test_WLDZYqObDG3iCDmgSGWDjmRN");
+    var token = req.body.stripeToken;
+    console.log('token: ', token);
+    // Charge the user's card:
+    var charge = stripe.charges.create({
+      amount: 1000,
+      currency: "usd",
+      description: "Example charge",
+      source: token,
+    }, function (err, charge) {
+      // asynchronously called
+      if (err) {
+        // TODO: there is something wrong take care of it
+        console.log('Error processinfg credit card', err);
+        res.send({res: 'error', code: JSON.stringify(err)});
+      } else {
+        console.log('Success processinfg credit card');
+        res.render('pages/receipt');
+      }
+    });
+  });
+
+  app.get('/abc', function (req, res) {
+    sequelize.models.skus.findAll().then(function (sku) {
+      console.log("type: " + typeof(sku))
+      sku.map(function (singlesku) {
+        console.log("::::: " + JSON.stringify(singlesku))
+        //console.log("::::: => " + singlesku.Instance)
+      })
+      res.send(sku)
+    })
+  });
+
+  app.post('/pre-order-conf', function (req, res) {
+    var data = req.body.data;
+    data.map(function (el) {
+      console.log('el: ', el);
+      sequelize.models.products.findAll(
+        {
+          where: {
+            'skuId': el.sku_id /*,
+            $or: [
+              {shippingdate: [null, undefined]},
+              {shippingdate: {}}
+            ]*/
+          }
+        }).then(function(products) {
+        products.findAll
+        products.map(function (product) {
+          console.log('product: ', product.serialno);
+        });
+      });
+    });
+    res.send({name: 'test'});
+  });
+
+  app.get('/cart', function (req, res) {
+    res.render('pages/cart');
+  });
+
+  app.get('/datepicker', function (req, res) {
+    res.render('pages/datepickerdemo');
+  });
+
+  console.log("surprise me..");
+  console.log(sequelize.models.skus)
+  //console.log(sku(app.get('sequelize')));
+  app.configure(availability);
+};

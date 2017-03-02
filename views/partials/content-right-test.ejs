@@ -1,0 +1,41 @@
+<div class="col-md-9 pull-right">
+  <div id="products" class="row">
+
+    <% skus.map(function(sku) { %>
+    <div class="col-md-4 col-sm-6 col-xs-12">
+      <div class="product clearfix">
+        <div class="ribbon sale"></div><!-- Ribbon -->
+        <div class="product-image">
+          <a href="#"><img src="images/SKU-0.jpg" class="img-responsive" alt="Fancy Shoes"></a>
+          <a href="#"><img src="images/<%= sku.id %>-back.jpg" class="img-responsive" alt="Fancy Shoes"></a>
+          <div class="product-overlay">
+            <a href="#" class="add-to-cart"><i class="fa fa-cart-plus"></i></a>
+            <a href="images/SKU-0.jpg" onclick="window.location.href = '/product_details';" class="gallery-zoom" data-lightbox="ajax"><i
+                class="fa fa-search"></i></a>
+          </div>
+        </div>
+        <div class="product-desc">
+          <div class="editContent">
+            <h3><a href="#">Shop Item 1::</a></h3>
+          </div>
+          <div class="editContent">
+            <h4>
+              <del>$24.99</del>
+              $12.49
+            </h4>
+          </div>
+          <div class="product-rating">
+            <i class="fa fa-star"></i>
+            <i class="fa fa-star"></i>
+            <i class="fa fa-star"></i>
+            <i class="fa fa-star-half-o"></i>
+            <i class="fa fa-star-o"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% }) %>
+
+  </div><!-- /.row -->
+
+</div><!-- /.main-col -->

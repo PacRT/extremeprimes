@@ -1,0 +1,31 @@
+function onSlrKillerClick_1() {
+  var ExampleApplication = React.createClass({
+    render: function () {
+      /*var thepromise = fetch('/skus/')
+        .then((response) => response.json())
+        .then((responseJson) => {
+          return responseJson.data;
+        })
+        .catch((error) => {
+          console.error(error);
+        }); */
+      //var realpromise = Promise.resolve(thepromise)
+      //console.log(realpromise)
+
+      var elapsed = Math.round(this.props.elapsed / 100);
+      var seconds = elapsed / 10 + (elapsed % 10 ? '' : '.0' );
+      var message =
+        'React has been successfully running for ' + JSON.stringify({name: "CM"}) + ' seconds.';
+      //return React.DOM.p(null, message);
+      return <p>{message}</p>;
+    }
+  });
+
+  var start = new Date().getTime();
+  setInterval(function() {
+    ReactDOM.render(
+    <ExampleApplication elapsed={new Date().getTime() - start} />,
+      document.getElementById('products')
+    );
+  }, 50);
+}

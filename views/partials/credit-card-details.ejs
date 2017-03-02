@@ -1,0 +1,56 @@
+<div class="row">
+  <div class="col-sm-8">
+    <div class="form-group">
+      <input type="text" placeholder="Card Number" data-stripe="number" class="form-control">
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-4">
+    <div class="form-group">
+      <input type="text" placeholder="Exp (MM)" data-stripe="exp_month" class="form-control">
+    </div>
+  </div>
+  <div class="col-sm-4">
+    <div class="form-group">
+      <input type="text" placeholder="Exp (YY)" data-stripe="exp_year" class="form-control">
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-3">
+    <div class="form-group">
+      <input type="text" placeholder="CVC" data-stripe="cvc" class="form-control">
+    </div>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-sm-8">
+    <div class="form-group">
+      <input type="text" name="card_holders_name" placeholder="Card Holder's Name" class="form-control">
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-8">
+    <div class="form-group">
+      <!-- input type="text" size="20" name="card_holders_email" placeholder="Card Holder's Email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" class="form-control" -->
+      <input type="text" size="20" name="card_holders_email" placeholder="Card Holder's Email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" class="form-control">
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-8">
+    <div class="form-group">
+    <input type="text" size="20" name="card_holders_phone" placeholder="Card Holder's Phone" class="form-control">
+    </div>
+  </div>
+</div>
+
+<%include ../partials/address%>

@@ -1,0 +1,75 @@
+CREATE PRODUCT
+—————————
+curl 'http://localhost:3030/products/' -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiaWF0IjoxNDgzNzcyNjY0LCJleHAiOjE0ODM4NTkwNjQsImlzcyI6ImZlYXRoZXJzIn0.gw3iJu8bL96yTUBToB0Zen7bea3Fhm0NZ0ySARWsUyY" -H 'Content-Type: application/json' --data-binary '{ "text": "Hello Feathers!", "serialno": "1236", "sku": "1", "availability": "true" }'
+
+CREATE USER
+———————
+curl -X POST -H 'Content-Type: application/json' -d '{ "email": "me@meme.com", "password": "meme" }' http://localhost:3030/users
+
+CREATE ADMIN USER
+-----------------
+curl -X POST -H 'Content-Type: application/json' -d '{ "email": "admin@meme.com", "password": "meme", "group": "ADMIN" }' http://localhost:3030/users
+
+GET AUTH TOKEN
+—————————
+curl -X POST -H 'Content-Type: application/json' -d '{ "email": "admin@meme.com", "password": "meme" }' http://localhost:3030/auth/local
+curl -X POST -H 'Content-Type: application/json' -d '{ "email": "me@meme.com", "password": "meme" }' http://localhost:3030/auth/local
+
+DELETE A PRODUCT
+——————————
+curl -X DELETE 'http://localhost:3030/products?id=4' -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiaWF0IjoxNDgzNjY5MzAzLCJleHAiOjE0ODM3NTU3MDMsImlzcyI6ImZlYXRoZXJzIn0.89ErcgJwhMulB8IY6E2zGBeYyT1xTkVFo04Bj1VaJpY"
+
+CREATE AN ORDER
+—————————
+curl -X POST -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiaWF0IjoxNDgzNzcyNjY0LCJleHAiOjE0ODM4NTkwNjQsImlzcyI6ImZlYXRoZXJzIn0.gw3iJu8bL96yTUBToB0Zen7bea3Fhm0NZ0ySARWsUyY" -H 'Content-Type: application/json' -d '{ "orderid": "order-1", "email": "me@me.com", "text": "my good order" }' http://localhost:3030/orders
+
+CREATE AN ORDER ITEM
+--------------------
+curl -X POST -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiaWF0IjoxNDgzNzcyNjY0LCJleHAiOjE0ODM4NTkwNjQsImlzcyI6ImZlYXRoZXJzIn0.gw3iJu8bL96yTUBToB0Zen7bea3Fhm0NZ0ySARWsUyY" -H 'Content-Type: application/json' -d '{ "text": "my good order item" }' http://localhost:3030/orderitems
+
+SKU JSON
+--------
+ {"id": "SKU-0",
+  "manufacturer": "FUJI"
+  "model": "2016-HOT_REL",
+  "type": "LENS",
+  "category": "SLR_SLAYERS",
+  "totalquantity": 2,
+  "quantityavailable": 1,
+  "introdate": "2016-01-01",
+  "marketprice": "995.95",
+  "links": "http://meme.me",
+  "relatedskus": "NULL",
+  "text": "awesome sku"}
+
+PRODUCT_SKU JSON
+----------------
+ {"serialno": "ser-00-01",
+  "availability": "true",
+  "shippingdate": "2017-1-10",
+  "returndate": "2017-2-1",
+  "skuId": "SKU-0",
+  "text": "my awesome product"}
+
+ORDER JSON
+----------
+ {"email": "me@meme.me",
+  "text": "awesome order"}
+
+ORDERITEM JSON
+--------------
+ {"skuId": "SKU-2",
+  "orderId": "b9a54414-2582-47dd-97a4-90ea5d3b89aa",
+  "text": "awesome order item"}
+
+
+insert into skus values ('HASSY-X1D', 'HASSELBLAD', 'X1D','CAMERA', 'SLR_SLAYERS', 2, 1, '2016-12-1', 8200.00, 'http://www.hasselblad.com',NULL, 'A medium format reborn', CURRENT_DATE, CURRENT_DATE);
+insert into skus values ('LEICA-M-240', 'LEICA', 'M240','CAMERA', 'CLASSIC_RF', 2, 1, '2016-12-1', 7450.00, 'https://us.leica-camera.com',NULL, 'A classic reborn', CURRENT_DATE, CURRENT_DATE);
+insert into products values ('0001', true, null,null, 'nice product', CURRENT_DATE, CURRENT_DATE, 'HASSY-X1D');
+insert into products values ('0002', true, null,null, 'nice product', CURRENT_DATE, CURRENT_DATE, 'LEICA-M-240');
+insert into products values ('0003', true, null,null, 'nice product', CURRENT_DATE, CURRENT_DATE, 'LEICA-M-240');
+insert into products values ('0004', true, null,null, 'nice product', CURRENT_DATE, CURRENT_DATE, 'LEICA-M-240');
+insert into bookings values(0001, CURRENT_DATE, CURRENT_DATE, CURRENT_DATE, CURRENT_DATE, '0001');
+insert into bookings values(0002, CURRENT_DATE, CURRENT_DATE, CURRENT_DATE, CURRENT_DATE, '0001');                                                                 INSERT 0 1
+
+

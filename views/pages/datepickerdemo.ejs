@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <%include ../partials/head%>
+</head>
+<body>
+
+<section id="id01">
+<div id="wrapper">
+  <h1>jQuery Date Range Picker</h1>
+
+
+  <h2 id="demonstrations">Demonstrations</h2>
+
+  <div class="demo">
+    Default settings: <input id="date-range0" size="40" value="">
+  </div>
+
+  <script>
+    $(function () {
+      $('a.show-option').click(function (evt) {
+        evt.preventDefault();
+        $(this).siblings('.options').slideToggle();
+      });
+    })
+  </script>
+</div>
+</section>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!--DOCTYPE html -->
+<html>
+<head>
+  <% include ../partials/head %>
+</head>
+<body onload="createReceipt()">
+
+<div id="page" class="page"><!-- Start Shop 1-6 v1 -->
+  <header id="header-1">
+    <% include ../partials/header %>
+  </header>
+
+  <div hidden="visibility:hidden" class="demo">
+          <span id="date-range0"
+                style="background-color:#49e; color:white;padding:3px; cursor:pointer;
+                border-radius:4px; text-decoration: underline;">Select the rental period</span>
+    <span id="no_of_days">NO</span><span id="no_of_days_text"> day(s) selected....  </span>
+    <div class="demo">You pay: <span id="you_pay"
+                                     style="text-decoration: underline;">Select the period to see this</span></div>
+    <div id="date-range0-container"></div>
+  </div>
+
+  <!--// End Shop 1-6 v1 --><!-- HEADER 1 -->
+
+  <!--// END HEADER 1 --><!-- Start Shop 1-2 -->
+
+  <!--// END Shop 1-2 --><!-- Start Shop 1-5 v2 -->
+
+  <!--// End Shop 1-5 v2 --><!-- Start Footer 1-1 -->
+
+  <!--// END Footer 1-1 --><!-- Start Shop 1-7 -->
+  <section id="shop-1-7" class="content-block shop-1-7">
+    <div class="container">
+      <div class="row">
+
+        <table class="table table-striped table-hover cart-table">
+          <thead>
+          <tr>
+            <th>PRODUCT</th>
+            <th>PERIOD</th>
+            <th>DAYS</th>
+            <th>PRICE</th>
+            <th>QUANTITY</th>
+            <th>TOTAL</th>
+          </tr>
+          </thead>
+          <tbody id="cart_table">
+          </tbody>
+        </table>
+
+
+        <div class="row">
+          <div class="col-md-5 col-md-offset-2 col-sm-6 col-xs-12">
+            <h3>Cart &amp; Shipping Totals:</h3>
+            <table class="table table-striped table-hover cart-table">
+              <tbody>
+              <tr>
+                <td><strong>Cart Subtotal</strong></td>
+                <td id="cart_sub_total">$$</td>
+              </tr>
+              <tr>
+                <td><strong>Flat rate shipping (Lower 48 US States) **</strong></td>
+                <td>$25.00</td>
+              </tr>
+              <tr class="big-total">
+                <td><strong>Total</strong></td>
+                <td id="g_total">$$</td>
+              </tr>
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+  <!--// End Shop 1-7 --></div><!-- /#page -->
+
+
+<!-- Scripts at the end... you know the score! -->
+<!-- Core Scripts (Do not remove) -->
+
+
+<!-- Vendor Scripts (Feel free to remove any that you aren't using in your final export) -->
+
+<!-- Header 1 -->
+<!-- Header 1 -->
+<!-- Promo 2 Countdown -->
+<!-- Owl Carousel -->
+<!-- Content 2-7 Counter -->
+<!-- Content 2-7 Counter -->
+<!-- Gallery Filter -->
+<!-- Gallery Popup -->
+<!-- Contact Form -->
+<!-- Contact Form -->
+
+<!--
+  <script src="https://maps.google.com/maps/api/js?sensor=true"></script>
+  -->
+
+<!-- Theme Scripts (Do not remove) -->
+
+<% include ../partials/scripts %>
+</body>
+</html>
