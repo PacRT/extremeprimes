@@ -56,6 +56,7 @@ $('#header-nav li').click(function () {
 });
 
 $('#confirm_order').click(function () {
+  $('#confirm_order').prop('disabled', true);
   // check the final availability of the products
   var warning = "";
   if (cart.length == 0) {

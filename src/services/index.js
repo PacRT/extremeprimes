@@ -169,6 +169,7 @@ module.exports = function () {
       currency: "usd",
       description: "Example charge",
       source: token,
+      receipt_email: req.body.card_holders_email, // This is to send email receipt to the customer - dashboard configuration is needed
       metadata: {
         card_holders_name: req.body.card_holders_name,
         card_holders_email: req.body.card_holders_email,
