@@ -40,6 +40,9 @@ function handleTypeClick(cb) {
   var filter = '&camera=' + camera_checked + '&lens=' + lens_checked + '&accessory=' + accessory_checked;
   $.get(content_right_query_cache + filter, function (data, status) {
     $('#content-right').html(data);
+    $('#type_camera_cb').prop('checked', camera_checked);
+    $('#type_lens_cb').prop('checked', lens_checked);
+    $('#type_accessory_cb').prop('checked', accessory_checked);
   });
   resetTypeCheckBoxes();
 }

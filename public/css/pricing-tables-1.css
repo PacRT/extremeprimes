@@ -109,23 +109,23 @@
 
 /* Small Devices, Tablets */
 @media only screen and (min-width : 768px) {
-	
-	
-	
+
+
+
 }
 
 /* Medium Devices, Desktops */
 @media only screen and (min-width : 992px) {
-	
+
 	.pricing-table-1 .price-block {
-		margin-bottom: 20px;
-	
+    margin-bottom: 20px;
+  }
 }
 
 /* Large Devices, Wide Screens */
 @media only screen and (min-width : 1200px) {
-	
-	
-	
+
+
+
 }
 

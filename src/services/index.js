@@ -7,6 +7,9 @@ const product = require('./product');
 const authentication = require('./authentication');
 const user = require('./user');
 const Sequelize = require('sequelize');
+
+var pino = require('pino')()
+
 module.exports = function () {
   const app = this;
 
@@ -38,7 +41,7 @@ module.exports = function () {
   sequelize.sync({force: false});
 
   app.get('/content-right', function (req, res) {
-    console.log("req.query: ", req.query)
+    pino.info("req.query: ", req.query)
     if (req.query.mfr != null) {
       sequelize.models.skus.findAll({
         where: {
@@ -84,7 +87,7 @@ module.exports = function () {
   });
 
   app.get('/product_details', function (req, res) {
-    console.log('req.query.sku: ', req.query.sku)
+    pino.info('req.query.sku: ', req.query.sku)
     if (req.query.sku == null) {
       // render the error page
       res.render('pages/error-page')
@@ -103,7 +106,7 @@ module.exports = function () {
   })
 
   function findBookings(skuid, startdate, enddate, cb) {
-    console.log('skuid: ', skuid);
+    pino.info('skuid: ', skuid);
     var availableproducts = {
       skuid: skuid,
       startdate: startdate,
@@ -111,7 +114,7 @@ module.exports = function () {
       serialNos: []
     }
     sequelize.models.products.findAll({where: {skuId: skuid}}).then((products) => {
-      console.log('Products length: ', products.length);
+      pino.info('Products length: ', products.length);
       products.map(function (product) {
         sequelize.models.bookings.findAll({where: {productSerialno: product.serialno}}).then(function (bookings) {
           if (bookings.length == 0) { // that means no booking made for the serialNo - and is available
@@ -145,7 +148,7 @@ module.exports = function () {
   }
 
   app.get('/product_details_test', function (req, res) {
-    console.log('req.query.sku: ', req.query.sku)
+    pino.info('req.query.sku: ', req.query.sku)
     var sku = {
       img: 'images/omd_em1_m2.jpg',
       img_back: 'images/omd_em1_m2_back.jpg',
@@ -159,8 +162,8 @@ module.exports = function () {
   });
 
   app.post('/stripe-pay', function (req, res) {
-    console.log('Trying to process the ceredit card')
-    console.log('/stripe-pay request body: ', req.body)
+    pino.info('Trying to process the ceredit card')
+    pino.info('/stripe-pay request body: ', req.body)
     var stripe = require("stripe")("sk_test_WLDZYqObDG3iCDmgSGWDjmRN");
     var token = req.body.stripeToken;
     // Charge the user's card:
@@ -187,11 +190,12 @@ module.exports = function () {
       // asynchronously called
       if (err) {
         // TODO: there is something wrong take care of it
-        console.log('Error processinfg credit card', err);
-        res.send({res: 'error', code: JSON.stringify(err)});
+        pino.info('Error processinfg credit card', err);
+        //res.send({res: 'error', code: JSON.stringify(err)});
+        res.render('pages/error-page')
       } else {
-        console.log('Success processinfg credit card');
-        console.log('charge object:', charge);
+        pino.info('Success processinfg credit card');
+        pino.info('charge object:', charge);
         //Now create the order
         sequelize.models.orders.create({
           name: req.body.card_holders_name,
@@ -208,16 +212,23 @@ module.exports = function () {
           text: JSON.stringify(charge),
         }).then((order)=> {
           //When Order is created - create orderitems
+          var emailstring = "Hello " + chargeObj.metadata.card_holders_name + "!\nPlease find your order details below." +
+            "\n\nOrder Id: " + order.id +
+            "\n-----------------\n\n" +
+            "Item\t\tDate Range\t\t\tPrice\n"
           var cart_items = req.body.cart_items;
           cart_items.map((c_item) => {
-            console.log('>>>> cart_item: ' + c_item);
+            pino.info('>>>> cart_item: ' + c_item);
             var cart_item = JSON.parse(c_item);
+            emailstring = emailstring + cart_item.sku_name +
+              "\t" + cart_item.date_range +
+              "\t$" + cart_item.you_pay + "\n";
             sequelize.models.orderitems.create({
               orderId: order.id,
               skuId: cart_item.sku_id,
               quantity: cart_item.quantity
             }).then((item) => {
-              console.log('Order Item created: ' + JSON.stringify(item));
+              pino.info('Order Item created: ', JSON.stringify(item));
               // Time to update the booking table
               findBookings(cart_item.sku_id, cart_item.startdate, cart_item.enddate, (available_products) => {
                 sequelize.models.bookings.create({
@@ -225,11 +236,25 @@ module.exports = function () {
                   shippingdate: cart_item.startdate,
                   returndate: cart_item.enddate
                 }).then((booking) => {
-                  console.log('Booking created :' +JSON.stringify(booking));
+                  pino.info('Booking created :', JSON.stringify(booking));
                 });
               })
             });
           });
+          //TODO: send email
+          emailstring = emailstring + "\n---------------------\n" +
+            "Shipping Charge: $25" +
+            "\nTotal: \t" +req.body.charge_amount +
+            "\n\nShipping Address: " +
+            "\n" + chargeObj.metadata.addressline1 +
+            "\n" + chargeObj.metadata.addressline2 +
+            "\n" + chargeObj.metadata.city +
+            "\n" + chargeObj.metadata.city +
+            "\n" + chargeObj.metadata.state + " " +chargeObj.metadata.zip +
+            "\n\nShipping confirmation and tracking information will be sent once we ship" +
+            "\n\nAlway quote the order id " + order.id + " for any future communication" +
+            "\n\nThanks,\nTeam ExtremePrimes";
+          pino.info("emailstring: \n", emailstring);
         });
         res.render('pages/receipt');
       }
@@ -241,9 +266,9 @@ module.exports = function () {
     var cart_products = [];
     if(data != null && data != undefined) {
       data.map(function (el) { // this is actually the cart data - map iterates over it
-        console.log('el: ', el);
+        pino.info('el: ', el);
         findBookings(el.sku_id, el.startdate, el.enddate, function (availableproducts) {
-          console.log('Available products: ', availableproducts);
+          pino.info('Available products: ', availableproducts);
           cart_products.push(availableproducts);
         });
       });

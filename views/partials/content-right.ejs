@@ -1,12 +1,23 @@
 <div class="col-md-9 pull-right">
 
+  <!-- div class="col-md-9 pull-right">
+    <form id="eq_type">
+      <label class="checkbox-inline"><input type="checkbox" id="type_camera_cb" value="camera"
+                                            onclick="handleTypeClick(this)">Cameras</label>
+      <label class="checkbox-inline"><input type="checkbox" id="type_lens_cb" value="lens"
+                                            onclick="handleTypeClick(this)">Lenses</label>
+      <label class="checkbox-inline"><input type="checkbox" id="type_accessory_cb" value="accessory"
+                                            onclick="handleTypeClick(this)">Accessories</label>
+    </form>
+  </div -->
+
   <div id="products" class="row">
     <% skus.map(function(sku) { %>
     <div class="col-md-4 col-sm-6 col-xs-12">
       <div class="product clearfix">
         <div class="ribbon red-hot"></div><!-- Ribbon -->
         <div class="product-image">
-          <a href='/product_details?sku=<%= sku.id %>'><img src="/images/<%= sku.id %>.jpg"  class="img-responsive"
+          <a href='/product_details?sku=<%= sku.id %>'><img src="/images/<%= sku.id %>.jpg" class="img-responsive"
                                                             alt="Cool Cam"></a>
           <!-- a href="#" onclick="window.location.href = '/product_details';"><img src=<%= sku.img_back %> class="img-responsive" alt="Fancy Shoes"></a -->
           <a href='/product_details?sku=<%= sku.id %>'><img src="images/<%= sku.id %>-back.jpg" class="img-responsive"
@@ -26,13 +37,13 @@
               $<%= sku.marketprice %>
             </h4 -->
           </div>
-          <div class="product-rating">
+          <!-- div class="product-rating">
             <i class="fa fa-star"></i>
             <i class="fa fa-star"></i>
             <i class="fa fa-star"></i>
             <i class="fa fa-star-half-o"></i>
             <i class="fa fa-star-o"></i>
-          </div>
+          </div-->
         </div>
       </div>
     </div>

@@ -3,7 +3,7 @@
 
 
 .shop-1-6 {
-	
+
 }
 
 
@@ -40,7 +40,7 @@ body:not(.device-touch):not(.device-xs):not(.device-xxs) .shop-1-6 .product-imag
 }
 
 .shop-1-6 .product-desc {
-	
+
 }
 
 .shop-1-6 .product-desc h1 {
@@ -194,7 +194,7 @@ body:not(.device-touch):not(.device-xs):not(.device-xxs) .shop-1-6 .product-imag
 .shop-1-6 .sml-item .entry-image img,
 .shop-1-6 .sml-item .entry-image i {
 	width: 48px;
-	hei ght: 48px;
+	height: 48px;
 }
 
 .shop-1-6 .sml-item .entry-image a i {
@@ -235,21 +235,21 @@ body:not(.device-touch):not(.device-xs):not(.device-xxs) .shop-1-6 .product-imag
 
 /* Small Devices, Tablets */
 @media only screen and (min-width : 768px) {
-	
-		
-	
+
+
+
 }
 
 /* Medium Devices, Desktops */
 @media only screen and (min-width : 992px) {
-	
 
-	
+
+
 }
 
 /* Large Devices, Wide Screens */
 @media only screen and (min-width : 1200px) {
-	
-	
-	
+
+
+
 }
