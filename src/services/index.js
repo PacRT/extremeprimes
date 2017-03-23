@@ -242,22 +242,43 @@ module.exports = function () {
             });
           });
           //TODO: send email
+          var addr_obj = (req.body.shipping_address_checkbox == 'checked') ? chargeObj.metadata : JSON.parse(order.billing_address)
           emailstring = emailstring + "\n---------------------\n" +
             "Shipping Charge: $25" +
             "\nTotal: \t" +req.body.charge_amount +
             "\n\nShipping Address: " +
-            "\n" + chargeObj.metadata.addressline1 +
-            "\n" + chargeObj.metadata.addressline2 +
-            "\n" + chargeObj.metadata.city +
-            "\n" + chargeObj.metadata.city +
-            "\n" + chargeObj.metadata.state + " " +chargeObj.metadata.zip +
+            "\n" + addr_obj.addressline1 +
+            "\n" + addr_obj.addressline2 +
+            "\n" + addr_obj.city +
+            "\n" + addr_obj.state + " " +addr_obj.zip +
             "\n\nShipping confirmation and tracking information will be sent once we ship" +
             "\n\nAlway quote the order id " + order.id + " for any future communication" +
             "\n\nThanks,\nTeam ExtremePrimes";
           pino.info("emailstring: \n", emailstring);
+          require('./twilio-sms').sendSMS(emailstring);
         });
         res.render('pages/receipt');
       }
+    });
+  });
+
+  app.post('/search', (req,res) => {
+    var data = req.body.data;
+    if(typeof(data) != 'string') {
+      data = JSON.stringify(data);
+    }
+    //data.split(" ");
+    var option = {
+      where: {
+        model: {
+          $ilike: data
+        }
+      }
+    }
+    sequelize.models.skus.findAll(option).then(function (skus) {
+      app.render('pages/index', {skus: skus}, (err, data) => {
+        res.send(data);
+      });
     });
   });
 

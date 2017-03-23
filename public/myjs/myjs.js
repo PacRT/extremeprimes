@@ -61,48 +61,52 @@ $('#header-nav li').click(function () {
 $('#confirm_order').click(function () {
   $('#confirm_order').prop('disabled', true);
   // check the final availability of the products
-  var warning = "";
   if (cart.length == 0) {
-    $('#over_order_warning').html('<a href="#over_order_warning" class="close" data-dismiss="alert" aria-label="close">&times;</a>Cart is empty');
-    $('#over_order_warning').attr('hidden', false);
+    $('.over_order_warning').html('<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Cart is empty');
+    $('.over_order_warning').attr('hidden', false);
   } else {
     $('#shipping_payment').attr('hidden', false);
-    preOrderConfirmation(function (_cart) {
-      $.post('/pre-order-conf', {data: _cart}, function (data, status, xhr) {
-        // update cart if availability has different reality
-        if (status == 'success') {
-          var bcart = beautifyCart();
-          data.map((elem) => {
-            if (elem.serialNos.length == 0 && bcart.get(elem.skuid).quantity > 0) {
-              warning += warning == "" ? "" : "<br/>"
-              warning = warning + " <strong>" + elem.skuid + " is not available for the selected period </strong>";
-              //bcart.get(elem.skuid).quantity = 0;
-              removeItemFromCart(bcart, elem.skuid);
-            } else if (elem.serialNos.length < bcart.get(elem.skuid).quantity) {
-              warning += warning == "" ? "" : "<br/>"
-              warning = warning + "<strong>Only " + elem.serialNos.length + " of " + elem.skuid + " is/are available for the selected period</strong>";
-              bcart.get(elem.skuid).quantity = elem.serialNos.length;
-            } else {
-              //alert('This item is available during selected period: ' +elem.skuid);
-            }
-          });
-          if (warning != "") {
-            warning = '<a href="#over_order_warning" class="close" data-dismiss="alert" aria-label="close">&times;</a>' + warning;
-            $('#over_order_warning').html(warning);
-            $('#over_order_warning').attr('hidden', false);
-          } else {
-            $('#over_order_warning').attr('hidden', true);
-          }
-          refreshCartArrFromMap(bcart);
-          loadCartTable(); // redraw the carttable
-          $('#cart_item_count').html(cart.length);
-        } else {
-          alert('failed');
-        }
-      }, 'json');
-    });
+    preOrderConf()
   }
 });
+
+function preOrderConf() {
+  var warning = "";
+  preOrderConfirmation(function (_cart) {
+    $.post('/pre-order-conf', {data: _cart}, function (data, status, xhr) {
+      // update cart if availability has different reality
+      if (status == 'success') {
+        var bcart = beautifyCart();
+        data.map((elem) => {
+          if (elem.serialNos.length == 0 && bcart.get(elem.skuid).quantity > 0) {
+            warning += warning == "" ? "" : "<br/>"
+            warning = warning + " <strong>" + elem.skuid + " is not available for the selected period </strong>";
+            //bcart.get(elem.skuid).quantity = 0;
+            removeItemFromCart(bcart, elem.skuid);
+          } else if (elem.serialNos.length < bcart.get(elem.skuid).quantity) {
+            warning += warning == "" ? "" : "<br/>"
+            warning = warning + "<strong>Only " + elem.serialNos.length + " of " + elem.skuid + " is/are available for the selected period</strong>";
+            bcart.get(elem.skuid).quantity = elem.serialNos.length;
+          } else {
+            //alert('This item is available during selected period: ' +elem.skuid);
+          }
+        });
+        if (warning != "") {
+          warning = '<a href="#over_order_warning" class="close" data-dismiss="alert" aria-label="close">&times;</a>' + warning;
+          $('.over_order_warning').html(warning);
+          $('.over_order_warning').attr('hidden', false);
+        } else {
+          $('.over_order_warning').attr('hidden', true);
+        }
+        refreshCartArrFromMap(bcart);
+        loadCartTable(); // redraw the carttable
+        $('#cart_item_count').html(cart.length);
+      } else {
+        alert('failed');
+      }
+    }, 'json');
+  });
+}
 
 var cart = [];
 
@@ -120,7 +124,8 @@ $("#add2cart").click(function () {
     sku_name: $('#sku_name').text(),
     no_of_days: $('#no_of_days').text(),
     date_range: $('#date_range').text(),
-    you_pay: $('#you_pay').text()
+    you_pay: $('#you_pay').text(),
+    delivery_mechanism: $('#delivery_mechanism').text()
   }
   if (cart_item.no_of_days == "NO") {
     // no duration is selected
@@ -132,6 +137,7 @@ $("#add2cart").click(function () {
   console.log('cart: ', JSON.stringify(cart))
   console.log($("#date-range0").text())
   putInLocalStorage('cart', JSON.stringify(cart));
+  preOrderConf();
 });
 
 function putInLocalStorage(key, value) {
@@ -175,8 +181,9 @@ function refreshCartArrFromMap(cartmap) {
   }
 }
 
+var uniquePackages = new Set
+
 function loadCartTable() {
-  console.log("loading cart table..");
   var bcart = beautifyCart();
   var html_fragment = "";
   var subtotal = 0;
@@ -184,6 +191,9 @@ function loadCartTable() {
     var lineTotal = Number(Number(elem.you_pay) * elem.quantity).toFixed(2);
     subtotal = Number(subtotal) + Number(lineTotal);
     if (elem.quantity != 0) {
+      if(elem.delivery_mechanism != 'PICKUP') {
+        uniquePackages.add(elem.date_range.trim())
+      }
       html_fragment += "<tr><td>" +
         "<a href='#' class='remove' title='Remove this item' data-toggle='tooltip' data-placement='top'><i class='fa fa-trash'>" +
         "<span hidden='hidden'>" + elem.sku_id + "</span></i>" +
@@ -208,13 +218,25 @@ function loadCartTable() {
         "</span>" +
         "</div> </div> </form>" +
         "</td>" +
-        "<td><strong>$" + lineTotal + "</strong></td></tr>";
+        "<td><strong>$" + lineTotal + "</strong></td>" +
+        "<td><strong>" + elem.delivery_mechanism + "</strong></td>" +
+        "</tr>";
     }
   });
   $('#cart_table').html(html_fragment);
   $('#cart_sub_total').html(Number(subtotal).toFixed(2));
-  var big_total = Number(subtotal) + 25;
-  $('#g_total').html(Number(big_total).toFixed(2));
+  var big_total = Number(subtotal) + uniquePackages.size * 25;
+
+  if(uniquePackages.size > 1) {
+    $('.imp-info').html('<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;' +
+      '</a>There will be multiple shipments due to different dates. Shipping Chargess will be more accordingly');
+    $('.imp-info').attr('hidden', false);
+  }
+
+  putInLocalStorage('number_of_packages', uniquePackages.size);
+
+  $('.number_of_packages').html(uniquePackages.size + 'X ')
+  $('.g_total').html(Number(big_total).toFixed(2));
   putInLocalStorage('charge_amount', Number(big_total).toFixed(2));
   $('.remove').click(function (evt) {
     var skkuu_id = evt.target.getElementsByTagName("span")[0].textContent;
@@ -264,7 +286,6 @@ function preOrderConfirmation(cb) {
 function createReceipt() {
   console.log("loading cart table..");
   var bcart = beautifyCart();
-  localStorage.clear();
   cart = [];
   $('#cart_item_count').html('Empty');
   var html_fragment = "";
@@ -297,9 +318,14 @@ function createReceipt() {
   $('#cart_table').html(html_fragment);
   console.log('subtotal: ', subtotal);
   $('#cart_sub_total').html('$' + Number(subtotal).toFixed(2));
-  var big_total = Number(subtotal) + 25;
+  var number_of_packages = Number(localStorage.getItem('number_of_packages'));
+
+  var big_total = Number(subtotal) + number_of_packages * 25;
+  $('.number_of_packages').html(number_of_packages + 'X ')
   console.log('big_total: ', big_total);
-  $('#g_total').html('$' + Number(big_total).toFixed(2));
+  $('.g_total').html('$' + Number(big_total).toFixed(2));
+  $('.number_of_packages').html(number_of_packages);
+  localStorage.clear(); // Clear up the localstorgae -- Very IMPORTANT
 }
 
 /*function getData() {

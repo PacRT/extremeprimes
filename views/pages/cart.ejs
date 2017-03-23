@@ -49,14 +49,18 @@ function initializePage() {
             <th>PRICE</th>
             <th>QUANTITY</th>
             <th>TOTAL</th>
+            <th>DELIVERY</th>
           </tr>
           </thead>
           <tbody id="cart_table">
           </tbody>
         </table>
 
-        <div id="over_order_warning" hidden="visibility:hidden" class="alert alert-warning alert-dismissable">
+        <div hidden="visibility:hidden" class="alert alert-warning alert-dismissable over_order_warning">
           over order warning
+        </div>
+        <div hidden="visibility:hidden" class="alert alert-info alert-dismissable imp-info">
+          Important Info
         </div>
 
         <hr>
@@ -95,11 +99,11 @@ function initializePage() {
               </tr>
               <tr>
                 <td><strong>Flat rate shipping (Lower 48 US States) **</strong></td>
-                <td>$25.00</td>
+                <td><span class="number_of_packages"></span>$25.00</td>
               </tr>
               <tr class="big-total">
                 <td><strong>Total</strong></td>
-                <td id="g_total">$$</td>
+                <td class="g_total">$$</td>
               </tr>
               </tbody>
             </table>

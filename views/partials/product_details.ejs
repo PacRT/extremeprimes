@@ -1,6 +1,9 @@
 <div class="col-md-12">
   <div class="row">
 
+    <span hidden="visibility:hidden" class="sku_id"><%=sku.id%></span>
+    <span hidden="visibility:hidden" id="delivery_mechanism">POST</span>
+
     <div class="col-md-6">
       <div class="ribbon exclusive"></div><!-- Ribbon -->
       <div class="product-image">
@@ -20,14 +23,14 @@
           <span id="sku_price" hidden="hidden"><%= sku.marketprice %></span>
           <span id="date_range" hidden="hidden">NONE</span>
         </div>
-        <div class="product-rating">
+        <!--div class="product-rating">
           <span>Avg customer rating:</span>
           <i class="fa fa-star"></i>
           <i class="fa fa-star"></i>
           <i class="fa fa-star"></i>
           <i class="fa fa-star-o"></i>
           <i class="fa fa-star-o"></i>
-        </div>
+        </div-->
         <div class="demo">
           <span id="date-range0"
                 style="background-color:#49e; color:white;padding:3px; cursor:pointer;
@@ -49,6 +52,10 @@
 											</span>
             </div>
           </div -->
+
+          <div hidden="visibility:hidden" class="alert alert-warning alert-dismissable over_order_warning">
+            over order warning
+          </div>
           <button id="add2cart" type="button" class="btn btn-primary" style="outline: none; cursor: inherit;">Add to
             Cart
           </button>
