@@ -147,20 +147,6 @@ module.exports = function () {
     return new Date(date.setDate(date.getDate() + offset));
   }
 
-  app.get('/product_details_test', function (req, res) {
-    pino.info('req.query.sku: ', req.query.sku)
-    var sku = {
-      img: 'images/omd_em1_m2.jpg',
-      img_back: 'images/omd_em1_m2_back.jpg',
-      id: "whatever0",
-      name: 'Olympus OMD EM1 Mark II',
-      orig_price: '1990.00',
-      price: '1890.00',
-      rating: '5'
-    };
-    res.render('pages/product_details_complete', {sku: sku});
-  });
-
   app.post('/stripe-pay', function (req, res) {
     pino.info('Trying to process the ceredit card')
     pino.info('/stripe-pay request body: ', req.body)
@@ -263,23 +249,55 @@ module.exports = function () {
   });
 
   app.post('/search', (req,res) => {
-    var data = req.body.data;
+    var data = req.body.search_string;
     if(typeof(data) != 'string') {
       data = JSON.stringify(data);
     }
-    //data.split(" ");
-    var option = {
-      where: {
-        model: {
-          $ilike: data
+    var terms = data.split(" ");
+    pino.info('Data: ', data)
+
+    var _skus = [];
+
+    terms.map(function(term) {
+      var option = {
+        where: {
+          $or: {
+            model: {
+              $ilike: '%'+term+'%'
+            },
+            type: {
+              $ilike: '%'+term+'%'
+            },
+            category: {
+              $ilike: '%'+term+ '%'
+            },
+            manufacturer: {
+              $ilike: '%'+term+ '%'
+            }
+          }
         }
       }
-    }
-    sequelize.models.skus.findAll(option).then(function (skus) {
-      app.render('pages/index', {skus: skus}, (err, data) => {
-        res.send(data);
+
+      sequelize.models.skus.findAll(option).then(function (skus) {
+        pino.info('SKUS: ', JSON.stringify(skus))
+        _skus = _skus.concat(skus);
       });
     });
+
+
+    setTimeout(() =>
+    {pino.info('SKUS: ', JSON.stringify(_skus))
+      // var uniqueSkus = Array.from(new Set(_skus)) // this does not work - does not eliminate duplicates
+      var idSet = new Set // to hold collection of unique sku ids
+      var newSkuArr = [] //new sku array with unique skus
+      _skus.forEach(e => {
+        if(idSet.has(e.id)) {}
+        else {
+          idSet.add(e.id)
+          newSkuArr.push(e)
+        }
+      });
+      res.render('pages/index', {skus: newSkuArr})}, 1000)
   });
 
   app.post('/pre-order-conf', function (req, res) {
@@ -295,6 +313,28 @@ module.exports = function () {
       });
     }
     setTimeout(() => {res.send(cart_products)},1000);
+  });
+  
+  app.post('/new-item-availability-date', (req, res) => {
+	  var offset = 0;
+	  var _sku = req.body.sku;
+	  pino.info('sku: ', _sku)
+	  sequelize.models.skus.findOne({where: {id: _sku}}).then(function (sku) {
+		  pino.info('here1')
+		  sequelize.models.products.count({where: {skuId: sku.id}}).then((count) => {
+			  pino.info('here2')
+			  if (count < 1) {
+				  if(sku.introdate != null || sku.introdate.trim() != '')
+					  offset = (new Date(sku.introdate).getTime() - new Date().getTime())/1000/60/60/24;
+				  else 
+					  offset = 20 // 30 days if no itrodtes are availale
+			  }
+			  else {
+			  	 offset = 0
+			  }
+		  });
+	  });
+	  setTimeout(() => {res.send(''+offset)},1000);
   });
 
   app.get('/cart', function (req, res) {

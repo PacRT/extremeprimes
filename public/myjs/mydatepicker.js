@@ -24,12 +24,31 @@ $(function () {
       case 11: return 31; break;
     }
   }
+  
+  // Get the value of the supplied URL parameter - the URL is the current URL shown on 
+  // Browser
+  var getUrlParameter = function getUrlParameter(sParam) {
+      var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+	  sURLVariables = sPageURL.split('&'), sParameterName, i;
+
+      for (i = 0; i < sURLVariables.length; i++) {
+          sParameterName = sURLVariables[i].split('=');
+          if (sParameterName[0] === sParam) {
+              return sParameterName[1] === undefined ? true : sParameterName[1];
+          }
+      }
+  };
+  
 
   function effectiveToday() {
     var today = new Date();
     var effective_today = new Date();
     var hour_now = (today.getUTCHours() - 7 + 24)%24;
-    if(hour_now > 17) effective_today.setDate(today.getDate()+1);
+    if(hour_now >= 17) effective_today.setDate(today.getDate()+1);
+    $.post('/new-item-availability-date', {sku: getUrlParameter('sku')}, function (data, status) {
+		alert('lala' + data)
+		return effective_today;
+    }); //work on it
     return effective_today;
   }
 

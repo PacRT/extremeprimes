@@ -328,6 +328,19 @@ function createReceipt() {
   localStorage.clear(); // Clear up the localstorgae -- Very IMPORTANT
 }
 
+/*$('#search').click(() => {
+  //alert('Search button clicked ' +  $('#search_field').val())
+  $.post(
+    //type: "POST",
+    "/search",
+    {data: $('#search_field').val()},
+  function (result, success) {
+      // Should we do anything?
+      //alert('Result: ' + result)
+      //$(":root").html(result)
+    })
+}); */
+
 /*function getData() {
  // Grab the template
  $.get('/results.ejs', function (template) {

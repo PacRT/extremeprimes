@@ -50,11 +50,11 @@
 
       </ul><!--//nav-->
 
-      <form class="navbar-form navbar-right" role="search">
+      <form class="navbar-form navbar-right" method="post" role="search" action="/search">
         <div class="input-group" style="margin: 12px auto 10px auto;">
-          <input type="text" class="form-control" placeholder="Search this site">
+          <input name="search_string" type="text" class="form-control" placeholder="Search this site">
           <span class="input-group-btn">
-            <button type="submit" class="btn btn-dark">
+            <button id="search" type="submit" class="btn btn-dark">
             <span>#</span>
             </button>
           </span>
