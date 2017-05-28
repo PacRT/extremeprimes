@@ -1,0 +1,95 @@
+<!--DOCTYPE html -->
+<html>
+<head>
+  <% include ../partials/head %>
+</head>
+<body>
+
+<div id="page" class="page">
+  <header id="header-1">
+    <% include ../partials/header %>
+  </header>
+</div>
+  <section id="admin-skus" class="">
+    <div class="container">
+      <h2>Admin Skus</h2>
+      <div class="row">
+        <form action="/skus-create" method="post" id="skus-create">
+          <table id ="admin-skus-tbl" class="display">
+            <thead>
+            <tr>
+              <th>ID</th>
+              <th>Manufacturer</th>
+              <th>model</th>
+              <th>Type</th>
+              <th>Category</th>
+              <th>Total Quantity</th>
+              <th>Quantity Available</th>
+              <th>Intro Date</th>
+              <th>Market Price</th>
+              <th>Links</th>
+              <th>Related Skus</th>
+              <th>Text</th>
+              <th>Description</th>
+              <th>Reviews</th>
+              <th>Acion</th>
+            </tr>
+            </thead>
+            <tbody id="skus_table">
+  						<tr>
+  							<td><input type="text" id="skus-id" class="form-control" style="width: 100px;" placeholder="ID" required></td>
+  							<td><input type="text" id="skus-manufacturer" class="form-control" style="width: 100px;" placeholder="manufacturer" required></td>
+  							<td><input type="text" id="skus-model" class="form-control" style="width: 100px;" placeholder="model" required></td>
+  							<td><input type="text" id="skus-type" class="form-control" style="width: 100px;" placeholder="type" required></td>
+  							<td><input type="text" id="skus-category" class="form-control" style="width: 100px;" placeholder="category"></td>
+  							<td><input type="number" id="skus-totalquantity" class="form-control" style="width: 100px;" placeholder="totalquantity" required></td>
+  							<td><input type="number" id="skus-quantityavailable" class="form-control" style="width: 100px;" placeholder="quantityavailable" required></td>
+  							<td><input type="text" id="skus-introdate" class="form-control" style="width: 100px;" placeholder="introdate"></td>
+  							<td><input type="number" id="skus-marketprice" class="form-control" style="width: 100px;" placeholder="marketprice" required></td>
+  							<td><input type="text" id="skus-links" class="form-control" style="width: 100px;" placeholder="links">
+  							<td><input type="text" id="skus-relatedskus" class="form-control" style="width: 100px;" placeholder="relatedskus">
+  							<td><input type="text" id="skus-text" class="form-control" style="width: 100px;" placeholder="text" required>
+  							<td><input type="text" id="skus-description" class="form-control" style="width: 100px;" placeholder="description">
+  							<td><input type="text" id="skus-reviews" class="form-control" style="width: 100px;" placeholder="reviews" >
+                <td>
+                   <button class="btn btn-success" type="button" style="outline: none; cursor: inherit;" javascript onclick="insertSkus()">Insert</button>
+                </td>
+  						</tr>
+  					  <% skus.map(function(sku) { %>
+  						<tr>
+  							<td><%= sku.id%></td>
+  							<td><%= sku.manufacturer%></td>
+  							<td><%= sku.model%></td>
+  							<td><%= sku.type%></td>
+  							<td><%= sku.category%></td>
+  							<td><%= sku.totalquantity%></td>
+  							<td><%= sku.quantityavailable%></td>
+  							<td><%= new Date(sku.introdate).toLocaleDateString()%></td>
+  							<td><%= sku.marketprice%></td>
+  							<td><%= sku.links%></td>
+  							<td><%= sku.relatedskus%></td>
+  							<td><%= sku.text%></td>
+  							<td><%= sku.description%></td>
+  							<td><%= sku.reviews%></td>
+                <td>
+                  <!--<button class="btn btn-default" type="button" style="outline: none; cursor: inherit;">Edit</button>
+                  <button class="btn btn-default" type="button" style="outline: none; cursor: inherit;">Delete</button>
+                -->
+                </td>
+  						</tr>
+  					  <% }) %>
+            </tbody>
+          </table>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <%include ../partials/footer %>
+
+<!-- Theme Scripts (Do not remove) -->
+
+<% include ../partials/scripts %>
+<% include ../partials/admin-scripts %>
+</body>
+</html>

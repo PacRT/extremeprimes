@@ -314,7 +314,7 @@ module.exports = function () {
     }
     setTimeout(() => {res.send(cart_products)},1000);
   });
-  
+
   app.post('/new-item-availability-date', (req, res) => {
 	  var offset = 0;
 	  var _sku = req.body.sku;
@@ -326,7 +326,7 @@ module.exports = function () {
 			  if (count < 1) {
 				  if(sku.introdate != null || sku.introdate.trim() != '')
 					  offset = (new Date(sku.introdate).getTime() - new Date().getTime())/1000/60/60/24;
-				  else 
+				  else
 					  offset = 20 // 30 days if no itrodtes are availale
 			  }
 			  else {
@@ -344,4 +344,41 @@ module.exports = function () {
   app.get('/datepicker', function (req, res) {
     res.render('pages/datepickerdemo');
   });
+
+	//Shuvankar: Admin
+	app.get('/admin-skus', function (req, res) {
+    sequelize.models.skus.findAll().then(function (skus) {
+      res.render('pages/admin-skus', {skus: skus}, function (err, data) {
+        res.send(data);
+      });
+    });
+  });
+
+	app.post('/skus-create', function (req, res) {
+    pino.info('Create Skus')
+    pino.info('hihi:'+'body: ' + JSON.stringify(req.body))
+    sequelize.models.skus.create({
+      id: req.body.id,
+      manufacturer: req.body.manufacturer,
+      model: req.body.model,
+      type: req.body.type,
+      category: req.body.category,
+      totalquantity: req.body.totalquantity,
+      quantityavailable: req.body.quantityavailable,
+      introdate: req.body.introdate,
+      marketprice: req.body.marketprice,
+      links: req.body.links,
+      relatedskus: req.body.relatedskus,
+      text: req.body.text,
+      description: req.body.description,
+      reviews: req.body.reviews,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    }).then(function(){
+      pino.info('SKUS created')
+    }).catch(function(err){
+      pino.error(err);
+    });
+  });
+
 };

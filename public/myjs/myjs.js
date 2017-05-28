@@ -371,6 +371,67 @@ function onSlrKillerClick(param) {
   });
 }
 
+//Shuvankar
+function insertSkus() {
+  //Validate the input field
+  var error = "";
+  if(!$('#skus-id')[0].checkValidity()) { error = error + 'enter id;'; };
+  if(!$('#skus-manufacturer')[0].checkValidity()) { error = error + 'enter manufacturer;'; };
+  if(!$('#skus-model')[0].checkValidity()) { error = error + 'enter model;'; };
+  if(!$('#skus-type')[0].checkValidity()) { error = error + 'enter type;'; };
+  if(!$('#skus-totalquantity')[0].checkValidity()) { error = error + 'enter totalquantity;'; };
+  if(!$('#skus-quantityavailable')[0].checkValidity()) { error = error + 'enter quantityavailable;'; };
+  if(!$('#skus-marketprice')[0].checkValidity()) { error = error + 'enter marketprice;'; };
+  if(!$('#skus-text')[0].checkValidity()) { error = error + 'enter text;'; };
 
+  if(error != "") { alert(error); return; }
+  console.log('begin insert');
+  var jsonString = "{" +
+                  "\"id\":\"" + $("#skus-id").val() +  "\"," +
+                  "\"manufacturer\":\"" + $("#skus-manufacturer").val() +  "\"," +
+                  "\"model\":\"" + $("#skus-model").val() +  "\"," +
+                  "\"type\":\"" + $("#skus-type").val() +  "\"," +
+                  "\"category\":\"" + $("#skus-category").val() +  "\"," +
+                  "\"totalquantity\":\"" + $("#skus-totalquantity").val() +  "\"," +
+                  "\"quantityavailable\":\"" + $("#skus-quantityavailable").val() +  "\"," +
+                  "\"introdate\":\"" + $("#skus-introdate").val() +  "\"," +
+                  "\"marketprice\":\"" + $("#skus-marketprice").val() +  "\"," +
+                  "\"links\":\"" + $("#skus-links").val() +  "\"," +
+                  "\"relatedskus\":\"" + $("#skus-relatedskus").val() +  "\"," +
+                  "\"text\":\"" + $("#skus-text").val() +  "\"," +
+                  "\"description\":\"" + $("#skus-description").val() +  "\"," +
+                  "\"reviews\":\"" + $("#skus-reviews").val() + "\"" +
+                  "}";
+  var jsonData = $.parseJSON(jsonString);
+  $.ajax({
+    url: "skus-create",
+    type: "POST",
+    dataType: "json",
+    data: jsonData,
+    success: function (result) {
+        console.log(result);
+        if(result.status == 200){
+            console.log('inserted');
+        }
+    },
+    error: function(result){
+        console.log(result);
+    }
+  });
+}
 
+/* TODO
+function updateSkus() {
+  $ajax({
+    url: "skus-insert",
+    type: "POST"
+  });
+}*/
 
+/* TODO
+function deleteSkus() {
+  $ajax({
+    url: "skus-insert",
+    type: "POST"
+  });
+}*/
