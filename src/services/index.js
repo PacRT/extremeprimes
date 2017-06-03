@@ -348,6 +348,7 @@ module.exports = function () {
 	//Shuvankar: Admin
 	app.get('/admin-skus', function (req, res) {
     sequelize.models.skus.findAll().then(function (skus) {
+    //sequelize.models.skus.findAll({order: '\"updatedAt\" DESC'}).then(function (skus) {
       res.render('pages/admin-skus', {skus: skus}, function (err, data) {
         res.send(data);
       });
@@ -376,8 +377,10 @@ module.exports = function () {
       updatedAt: new Date()
     }).then(function(){
       pino.info('SKUS created')
+      res.send("{\"msg\":\"inserted\"}");
     }).catch(function(err){
       pino.error(err);
+      res.send("{\"msg\":\""+err.name+"\"}");
     });
   });
 

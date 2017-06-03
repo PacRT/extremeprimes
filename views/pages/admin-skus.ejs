@@ -15,7 +15,76 @@
       <h2>Admin Skus</h2>
       <div class="row">
         <form action="/skus-create" method="post" id="skus-create">
-          <table id ="admin-skus-tbl" class="display">
+          <div>
+            <table>
+              <tr>
+                <div class="col-md-2 nopadding">
+                  <label for="skus-id">*ID:</label>
+                  <input type="text" id="skus-id" class="form-control" placeholder="*ID" required>
+                </div>
+                <div class="col-md-2 nopadding">
+                  <label for="skus-manufacturer">*Manufacturer:</label>
+                  <input type="text" id="skus-manufacturer" class="form-control" placeholder="*Manufacturer" required>
+                </div>
+                <div class="col-md-2 nopadding">
+                  <label for="skus-model">*Model:</label>
+                  <input type="text" id="skus-model" class="form-control" placeholder="*Model" required>
+                </div>
+                <div class="col-md-2 nopadding">
+                  <label for="skus-type">*Type:</label>
+                  <input type="text" id="skus-type" class="form-control" placeholder="*Type" required>
+                </div>
+                <div class="col-md-2 nopadding">
+                  <label for="skus-category">Category:</label>
+                  <input type="text" id="skus-category" class="form-control" placeholder="Category">
+                </div>
+                <div class="col-md-1 nopadding">
+                  <label for="skus-totalquantity">*TotQuant:</label>
+                  <input type="number" id="skus-totalquantity" class="form-control" placeholder="*Total Quantity" required>
+                </div>
+                <div class="col-md-1 nopadding">
+                  <label for="skus-quantityavailable">*QuanAvl:</label>
+                  <input type="number" id="skus-quantityavailable" class="form-control" placeholder="*Quantity Available" required>
+                </div>
+              </tr>
+              <tr>
+                <div class="col-md-2 nopadding">
+                  <label for="skus-marketprice">*Market Price</label>
+                  <input type="number"id="skus-marketprice" class="form-control" placeholder="*marketprice" required>
+                </div>
+                <div class="col-md-2 nopadding">
+                  <label for="skus-links">Links</label>
+                  <input type="text"id="skus-links" class="form-control" placeholder="links">
+                </div>
+                <div class="col-md-2 nopadding">
+                  <label for="skus-relatedskus">Related Skus</label>
+                  <input type="text"id="skus-relatedskus" class="form-control" placeholder="relatedskus">
+                </div>
+                <div class="col-md-2 nopadding">
+                  <label for="skus-introdate">*Intro Date</label>
+                  <input type="text"id="skus-introdate" class="form-control" placeholder="*introdate" required>
+                </div>
+                <div class="col-md-2 nopadding">
+                  <label for="skus-description">Description</label>
+                  <input type="text"id="skus-description" class="form-control" placeholder="description">
+                </div>
+                <div class="col-md-2 nopadding">
+                  <label for="skus-reviews">Reviews</label>
+                  <input type="text"id="skus-reviews" class="form-control" placeholder="reviews">
+                </div>
+              </tr>
+              <tr>
+                <div class="col-md-6 nopadding">
+                  <label for="skus-text">*Text</label>
+                  <textarea id="skus-text" class="form-control" placeholder="*text" required rows="1" cols="80"></textarea>
+                </div>
+                <div class="col-md-2">
+                  <button class="btn btn-success" type="button" style="outline: none; cursor: inherit;" javascript onclick="insertSkus()">Insert</button>
+                </div>
+              </tr>
+            </table>
+          </div>
+          <table id="admin-skus-tbl" class="display">
             <thead>
             <tr>
               <th>ID</th>
@@ -32,52 +101,27 @@
               <th>Text</th>
               <th>Description</th>
               <th>Reviews</th>
-              <th>Acion</th>
             </tr>
             </thead>
-            <tbody id="skus_table">
-  						<tr>
-  							<td><input type="text" id="skus-id" class="form-control" style="width: 100px;" placeholder="ID" required></td>
-  							<td><input type="text" id="skus-manufacturer" class="form-control" style="width: 100px;" placeholder="manufacturer" required></td>
-  							<td><input type="text" id="skus-model" class="form-control" style="width: 100px;" placeholder="model" required></td>
-  							<td><input type="text" id="skus-type" class="form-control" style="width: 100px;" placeholder="type" required></td>
-  							<td><input type="text" id="skus-category" class="form-control" style="width: 100px;" placeholder="category"></td>
-  							<td><input type="number" id="skus-totalquantity" class="form-control" style="width: 100px;" placeholder="totalquantity" required></td>
-  							<td><input type="number" id="skus-quantityavailable" class="form-control" style="width: 100px;" placeholder="quantityavailable" required></td>
-  							<td><input type="text" id="skus-introdate" class="form-control" style="width: 100px;" placeholder="introdate"></td>
-  							<td><input type="number" id="skus-marketprice" class="form-control" style="width: 100px;" placeholder="marketprice" required></td>
-  							<td><input type="text" id="skus-links" class="form-control" style="width: 100px;" placeholder="links">
-  							<td><input type="text" id="skus-relatedskus" class="form-control" style="width: 100px;" placeholder="relatedskus">
-  							<td><input type="text" id="skus-text" class="form-control" style="width: 100px;" placeholder="text" required>
-  							<td><input type="text" id="skus-description" class="form-control" style="width: 100px;" placeholder="description">
-  							<td><input type="text" id="skus-reviews" class="form-control" style="width: 100px;" placeholder="reviews" >
-                <td>
-                   <button class="btn btn-success" type="button" style="outline: none; cursor: inherit;" javascript onclick="insertSkus()">Insert</button>
-                </td>
-  						</tr>
-  					  <% skus.map(function(sku) { %>
-  						<tr>
-  							<td><%= sku.id%></td>
-  							<td><%= sku.manufacturer%></td>
-  							<td><%= sku.model%></td>
-  							<td><%= sku.type%></td>
-  							<td><%= sku.category%></td>
-  							<td><%= sku.totalquantity%></td>
-  							<td><%= sku.quantityavailable%></td>
-  							<td><%= new Date(sku.introdate).toLocaleDateString()%></td>
-  							<td><%= sku.marketprice%></td>
-  							<td><%= sku.links%></td>
-  							<td><%= sku.relatedskus%></td>
-  							<td><%= sku.text%></td>
-  							<td><%= sku.description%></td>
-  							<td><%= sku.reviews%></td>
-                <td>
-                  <!--<button class="btn btn-default" type="button" style="outline: none; cursor: inherit;">Edit</button>
-                  <button class="btn btn-default" type="button" style="outline: none; cursor: inherit;">Delete</button>
-                -->
-                </td>
-  						</tr>
-  					  <% }) %>
+            <tbody id="skus-tbl-body">
+              <% skus.map(function(sku) { %>
+                <tr>
+                  <td><%= sku.id%></td>
+                  <td><%= sku.manufacturer%></td>
+                  <td><%= sku.model%></td>
+                  <td><%= sku.type%></td>
+                  <td><%= sku.category%></td>
+                  <td><%= sku.totalquantity%></td>
+                  <td><%= sku.quantityavailable%></td>
+                  <td><%= new Date(sku.introdate).toLocaleDateString()%></td>
+                  <td><%= sku.marketprice%></td>
+                  <td><%= sku.links%></td>
+                  <td><%= sku.relatedskus%></td>
+                  <td><%= sku.text%></td>
+                  <td><%= sku.description%></td>
+                  <td><%= sku.reviews%></td>
+                </tr>
+              <% }) %>
             </tbody>
           </table>
         </form>

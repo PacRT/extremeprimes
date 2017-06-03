@@ -63,10 +63,10 @@ ORDERITEM JSON
   "text": "awesome order item"}
 
 
-insert into skus values ('HASSY-X1D', 'HASSELBLAD', 'X1D','CAMERA', 'SLR_SLAYERS', 2, 1, '2016-12-1', 8200.00, 'http://www.hasselblad.com',NULL, 'A medium format reborn', CURRENT_DATE, CURRENT_DATE);
-insert into skus values ('LEICA-M-240', 'LEICA', 'M240','CAMERA', 'CLASSIC_RF', 2, 1, '2016-12-1', 7450.00, 'https://us.leica-camera.com',NULL, 'A classic reborn', CURRENT_DATE, CURRENT_DATE);
-insert into skus values ('LEICA-SL', 'LEICA', 'SL','CAMERA', 'MODERN_CLASSIC', 2, 1, '2016-12-1', 8450.00, 'https://us.leica-camera.com',NULL, 'A classic reborn', CURRENT_DATE, CURRENT_DATE);
-insert into skus values ('OLY-OMD-EM1-2', 'OLYMPUS', 'OMD EM1 M2','CAMERA', 'MODERN_CLASSIC', 2, 1, '2016-12-1', 8450.00, 'https://getolympus.com',NULL, 'A classic reborn', CURRENT_DATE, CURRENT_DATE);
+insert into skus values ('HASSY-X1D', 'HASSELBLAD', 'X1D','CAMERA', 'SLR_SLAYERS', 2, 1, '2016-12-1', 8200.00, 'http://www.hasselblad.com',NULL, 'A medium format reborn',NULL, NULL, CURRENT_DATE, CURRENT_DATE);
+insert into skus values ('LEICA-M-240', 'LEICA', 'M240','CAMERA', 'CLASSIC_RF', 2, 1, '2016-12-1', 7450.00, 'https://us.leica-camera.com',NULL, 'A classic reborn',NULL, NULL, CURRENT_DATE, CURRENT_DATE);
+insert into skus values ('LEICA-SL', 'LEICA', 'SL','CAMERA', 'MODERN_CLASSIC', 2, 1, '2016-12-1', 8450.00, 'https://us.leica-camera.com',NULL, 'A classic reborn',NULL, NULL, CURRENT_DATE, CURRENT_DATE);
+insert into skus values ('OLY-OMD-EM1-2', 'OLYMPUS', 'OMD EM1 M2','CAMERA', 'MODERN_CLASSIC', 2, 1, '2016-12-1', 8450.00, 'https://getolympus.com',NULL, 'A classic reborn',NULL, NULL, CURRENT_DATE, CURRENT_DATE);
 insert into products values ('0001', true, null,null, 'nice product', CURRENT_DATE, CURRENT_DATE, 'HASSY-X1D');
 insert into products values ('0002', true, null,null, 'nice product', CURRENT_DATE, CURRENT_DATE, 'LEICA-M-240');
 insert into products values ('0003', true, null,null, 'nice product', CURRENT_DATE, CURRENT_DATE, 'LEICA-M-240');
@@ -74,5 +74,3 @@ insert into products values ('0004', true, null,null, 'nice product', CURRENT_DA
 insert into products values ('0005', true, null,null, 'nice product', CURRENT_DATE, CURRENT_DATE, 'LEICA-SL');
 insert into bookings values(0001, CURRENT_DATE, CURRENT_DATE, CURRENT_DATE, CURRENT_DATE, '0001');
 insert into bookings values(0002, CURRENT_DATE, CURRENT_DATE, CURRENT_DATE, CURRENT_DATE, '0001');                                                                 INSERT 0 1
-
-

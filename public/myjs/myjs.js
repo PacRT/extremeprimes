@@ -384,6 +384,22 @@ function insertSkus() {
   if(!$('#skus-marketprice')[0].checkValidity()) { error = error + 'enter marketprice;'; };
   if(!$('#skus-text')[0].checkValidity()) { error = error + 'enter text;'; };
 
+  var insertedTr = "<tr style=\"background-color:#adb\">" +
+                  "<td>"+$("#skus-id").val()+"</td>" +
+                  "<td>"+$("#skus-manufacturer").val()+"</td>" +
+                  "<td>"+$("#skus-model").val()+"</td>" +
+                  "<td>"+$("#skus-type").val()+"</td>" +
+                  "<td>"+$("#skus-category").val()+"</td>" +
+                  "<td>"+$("#skus-totalquantity").val()+"</td>" +
+                  "<td>"+$("#skus-quantityavailable").val()+"</td>" +
+                  "<td>"+$("#skus-introdate").val()+"</td>" +
+                  "<td>"+$("#skus-marketprice").val()+"</td>" +
+                  "<td>"+$("#skus-links").val()+"</td>" +
+                  "<td>"+$("#skus-relatedskus").val()+"</td>" +
+                  "<td>"+$("#skus-text").val()+"</td>" +
+                  "<td>"+$("#skus-description").val()+"</td>" +
+                  "<td>"+$("#skus-reviews").val()+"</td>" +
+                  "</tr>";
   if(error != "") { alert(error); return; }
   console.log('begin insert');
   var jsonString = "{" +
@@ -409,13 +425,21 @@ function insertSkus() {
     dataType: "json",
     data: jsonData,
     success: function (result) {
-        console.log(result);
-        if(result.status == 200){
-            console.log('inserted');
+        console.log(result.msg) ;
+        if (result.msg == 'SequelizeUniqueConstraintError') {
+          alert('Data already exists');
+        } else if (result.msg == 'inserted'){
+          alert('Data inserted');
+          $('#admin-skus-tbl tr:first').after(insertedTr);
+          $("#skus-create").trigger('reset');
+        } else {
+          alert('Something not good');
         }
     },
-    error: function(result){
-        console.log(result);
+    error: function(xhr, status, error) {
+      var errorMsg = " xhr.responseText: " + xhr.responseText + " //status: " + status + " //Error: "+error;
+      console.log(errorMsg);
+      alert(errorMsg);
     }
   });
 }
