@@ -45,10 +45,12 @@ $(function () {
     var effective_today = new Date();
     var hour_now = (today.getUTCHours() - 7 + 24)%24;
     if(hour_now >= 17) effective_today.setDate(today.getDate()+1);
-    $.post('/new-item-availability-date', {sku: getUrlParameter('sku')}, function (data, status) {
-		//alert('lala' + data)
-		return effective_today;
-    }); //work on it
+	if(getUrlParameter('sku') != 'undefined') {
+	    $.post('/new-item-availability-date', {sku: getUrlParameter('sku')}, function (data, status) {
+			//alert('lala' + data)
+			return effective_today;
+	    }); //work on it
+	}
     return effective_today;
   }
 

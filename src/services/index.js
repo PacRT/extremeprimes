@@ -332,6 +332,8 @@ module.exports = function () {
 			  else {
 			  	 offset = 0
 			  }
+		  }).catch((err) => {
+		  	pino.info('Error')
 		  });
 	  });
 	  setTimeout(() => {res.send(''+offset)},1000);
