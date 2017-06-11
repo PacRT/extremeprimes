@@ -357,6 +357,21 @@ module.exports = function () {
     });
   });
 
+  app.get('/get-skus-data', function (req, res) {
+    pino.info('req.query.sku: ', req.query.sku)
+    if (req.query.sku == null) {
+      res.send("{\"msg\":\"no sku provided\"}");
+    } else {
+      sequelize.models.skus.findByPrimary(req.query.sku).then(function (sku) {
+        if (sku != null) {
+          res.send(sku);
+        } else {
+          res.send("{\"msg\":\"no sku found\"}");
+        }
+      })
+    }
+  });
+
 	app.post('/skus-create', function (req, res) {
     pino.info('Create Skus')
     pino.info('hihi:'+'body: ' + JSON.stringify(req.body))
@@ -380,6 +395,36 @@ module.exports = function () {
     }).then(function(){
       pino.info('SKUS created')
       res.send("{\"msg\":\"inserted\"}");
+    }).catch(function(err){
+      pino.error(err);
+      res.send("{\"msg\":\""+err.name+"\"}");
+    });
+  });
+
+  app.post('/skus-update', function (req, res) {
+    pino.info('Update Skus')
+    sequelize.models.skus.update({
+      manufacturer: req.body.manufacturer,
+      model: req.body.model,
+      type: req.body.type,
+      category: req.body.category,
+      totalquantity: req.body.totalquantity,
+      quantityavailable: req.body.quantityavailable,
+      introdate: req.body.introdate,
+      marketprice: req.body.marketprice,
+      links: req.body.links,
+      relatedskus: req.body.relatedskus,
+      text: req.body.text,
+      description: req.body.description,
+      reviews: req.body.reviews,
+      updatedAt: new Date()
+    }, {
+      where: {
+        id: req.body.id
+      }
+    }).then(function(){
+      pino.info('SKUS updated')
+      res.send("{\"msg\":\"updated\"}");
     }).catch(function(err){
       pino.error(err);
       res.send("{\"msg\":\""+err.name+"\"}");

@@ -385,6 +385,7 @@ function insertSkus() {
   if(!$('#skus-text')[0].checkValidity()) { error = error + 'enter text;'; };
 
   var insertedTr = "<tr style=\"background-color:#adb\">" +
+                  "<td><a href=\"#\" data-toggle=\"modal\" data-target=\"#edit-modal\">U</a> / D</td>" +
                   "<td>"+$("#skus-id").val()+"</td>" +
                   "<td>"+$("#skus-manufacturer").val()+"</td>" +
                   "<td>"+$("#skus-model").val()+"</td>" +
@@ -431,7 +432,8 @@ function insertSkus() {
         } else if (result.msg == 'inserted'){
           alert('Data inserted');
           $('#admin-skus-tbl tr:first').after(insertedTr);
-          $("#skus-create").trigger('reset');
+          $("#add-form").trigger('reset');
+          $('#add-modal').modal('hide');
         } else {
           alert('Something not good');
         }
@@ -444,13 +446,86 @@ function insertSkus() {
   });
 }
 
-/* TODO
+function getSkusData(id) {
+  $.getJSON('get-skus-data?sku=' + id, function(obj) {
+    $('#edit-skus-id').val(obj.id);
+    $('#edit-skus-manufacturer').val(obj.manufacturer);
+    $('#edit-skus-model').val(obj.model);
+    $('#edit-skus-type').val(obj.type);
+    $('#edit-skus-category').val(obj.category);
+    $('#edit-skus-totalquantity').val(obj.totalquantity);
+    $('#edit-skus-quantityavailable').val(obj.quantityavailable);
+    $('#edit-skus-marketprice').val(obj.marketprice);
+    $('#edit-skus-links').val(obj.links);
+    $('#edit-skus-relatedskus').val(obj.relatedskus);
+    $('#edit-skus-introdate').val(new Date(obj.introdate).toLocaleDateString());
+    $('#edit-skus-description').val(obj.description);
+    $('#edit-skus-reviews').val(obj.reviews);
+    $('#edit-skus-text').val(obj.text);
+
+    $('#edit-modal').modal('show')
+  }).fail(function() { alert('Unable to fetch data, please try again later.') });
+
+
+}
+
 function updateSkus() {
-  $ajax({
-    url: "skus-insert",
-    type: "POST"
+  console.log('begin update');
+  var jsonString = "{" +
+                  "\"id\":\"" + $("#edit-skus-id").val() +  "\"," +
+                  "\"manufacturer\":\"" + $("#edit-skus-manufacturer").val() +  "\"," +
+                  "\"model\":\"" + $("#edit-skus-model").val() +  "\"," +
+                  "\"type\":\"" + $("#edit-skus-type").val() +  "\"," +
+                  "\"category\":\"" + $("#edit-skus-category").val() +  "\"," +
+                  "\"totalquantity\":\"" + $("#edit-skus-totalquantity").val() +  "\"," +
+                  "\"quantityavailable\":\"" + $("#edit-skus-quantityavailable").val() +  "\"," +
+                  "\"introdate\":\"" + $("#edit-skus-introdate").val() +  "\"," +
+                  "\"marketprice\":\"" + $("#edit-skus-marketprice").val() +  "\"," +
+                  "\"links\":\"" + $("#edit-skus-links").val() +  "\"," +
+                  "\"relatedskus\":\"" + $("#edit-skus-relatedskus").val() +  "\"," +
+                  "\"text\":\"" + $("#edit-skus-text").val() +  "\"," +
+                  "\"description\":\"" + $("#edit-skus-description").val() +  "\"," +
+                  "\"reviews\":\"" + $("#edit-skus-reviews").val() + "\"" +
+                  "}";
+  var jsonData = $.parseJSON(jsonString);
+  $.ajax({
+    url: "skus-update",
+    type: "POST",
+    dataType: "json",
+    data: jsonData,
+    success: function (result) {
+        console.log(result.msg) ;
+        if (result.msg == 'SequelizeUniqueConstraintError') {
+          alert('Data already exists');
+        } else if (result.msg == 'updated'){
+          alert('Data updated');
+          var tr = $('a[data-id="row-' + $('#edit-skus-id').val() + '"]').parent().parent();
+          $('td:eq(2)', tr).html(jsonData.manufacturer);
+          $('td:eq(3)', tr).html(jsonData.model);
+          $('td:eq(4)', tr).html(jsonData.type);
+          $('td:eq(5)', tr).html(jsonData.category);
+          $('td:eq(6)', tr).html(jsonData.totalquantity);
+          $('td:eq(7)', tr).html(jsonData.quantityavailable);
+          $('td:eq(8)', tr).html(new Date(jsonData.introdate).toLocaleDateString());
+          $('td:eq(9)', tr).html(jsonData.marketprice);
+          $('td:eq(10)', tr).html(jsonData.links);
+          $('td:eq(11)', tr).html(jsonData.relatedskus);
+          $('td:eq(12)', tr).html(jsonData.text);
+          $('td:eq(13)', tr).html(jsonData.description);
+          $('td:eq(14)', tr).html(jsonData.reviews);
+          $("#edit-form").trigger('reset');
+          $('#edit-modal').modal('hide');
+        } else {
+          alert('Something not good');
+        }
+    },
+    error: function(xhr, status, error) {
+      var errorMsg = " xhr.responseText: " + xhr.responseText + " //status: " + status + " //Error: "+error;
+      console.log(errorMsg);
+      alert(errorMsg);
+    }
   });
-}*/
+}
 
 /* TODO
 function deleteSkus() {

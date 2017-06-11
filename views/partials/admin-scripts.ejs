@@ -4,8 +4,29 @@
 <script type="text/javascript">
 $(document).ready(function() {
     $('#admin-skus-tbl').DataTable({
-      "scrollX": true
+      "scrollX": true,
+      "order": [[ 1, "desc" ]]
     });
     $( "#skus-introdate" ).datepicker();
+    $( "#edit-skus-introdate" ).datepicker();
+
+    // Add new row
+    $("#add-form").on("submit", function(event) {
+      event.preventDefault();
+      insertSkus();
+    });
+
+    // Save edited row
+    $("#edit-form").on("submit", function(event) {
+      event.preventDefault();
+      updateSkus();
+    });
+
 } );
+// Edit row
+function editRow(id) {
+  if ( 'undefined' != typeof id ) {
+    getSkusData(id);
+  } else alert('Unknown row id.');
+}
 </script>
