@@ -1,5 +1,5 @@
 //require the Twilio module and create a REST client
-var client = require('twilio')('ACb5649514def2a4c5c42b0cbfb353768e', '70680016cc25f247acdb7c48bd4e2253');
+var client = require('twilio')('', '');
 
 var pino = require('pino')()
 
